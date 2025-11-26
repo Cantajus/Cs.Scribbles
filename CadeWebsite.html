@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Cade's Commissions</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;600&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      /* Light purple theme */
+      --bg: #e8ddff;
+      --card: #ffffff;
+      --accent: #8a6bff;
+      --accent-soft: #d9ceff;
+      --text-main: #2b2535;
+      --text-muted: #6b627d;
+      --border: #c6b3ff;
+      --shadow-soft: 0 8px 20px rgba(0,0,0,0.10);
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: "Quicksand", sans-serif;
+      line-height: 1.6;
+      color: var(--text-main);
+
+      /* Light purple */
+      background-color: var(--bg);
+      background-image:
+        radial-gradient(2px 2px at 20% 30%, rgba(255,255,255,0.9), transparent),
+        radial-gradient(2px 2px at 60% 80%, rgba(255,255,255,0.7), transparent),
+        radial-gradient(1.6px 1.6px at 80% 20%, rgba(255,255,255,0.9), transparent),
+        radial-gradient(1.8px 1.8px at 40% 70%, rgba(255,255,255,0.6), transparent),
+        radial-gradient(1.4px 1.4px at 70% 50%, rgba(255,255,255,0.8), transparent);
+      background-attachment: fixed;
+      background-size: cover;
+    }
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 16px 48px;
+    }
+
+    header {
+      text-align: center;
+      padding: 32px 16px 24px;
+    }
+
+    header h1 {
+      font-size: clamp(2.3rem, 4vw, 3rem);
+      letter-spacing: 0.04em;
+    }
+
+    header .tagline {
+      margin-top: 8px;
+      color: var(--text-muted);
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #e7f9ee;
+      color: #16713a;
+      padding: 8px 18px;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      margin-top: 16px;
+      border: 1px solid #c7eccf;
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(6px);
+    }
+
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      background: #2fd05d;
+      border-radius: 50%;
+      box-shadow: 0 0 6px rgba(0,255,100,0.7);
+    }
+
+    /* Navigation */
+    .nav-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 24px;
+    }
+
+    .nav-button {
+      border-radius: 999px;
+      padding: 10px 18px;
+      border: 1px solid var(--border);
+      background: rgba(255,255,255,0.95);
+      box-shadow: var(--shadow-soft);
+      cursor: pointer;
+      color: var(--text-main);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.15s ease;
+      font-size: 0.92rem;
+      backdrop-filter: blur(6px);
+    }
+
+    .nav-button:hover {
+      background: var(--accent-soft);
+      transform: translateY(-2px);
+    }
+
+    /* Sections */
+    section {
+      background: rgba(255,255,255,0.97);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px 24px;
+      margin-top: 36px;
+      box-shadow: var(--shadow-soft);
+      backdrop-filter: blur(8px);
+    }
+
+    section h2 {
+      font-size: 1.5rem;
+      margin-bottom: 8px;
+    }
+
+    .section-sub {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 16px;
+    }
+
+    /* Pricing Layout */
+    .pricing-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      margin-top: 16px;
+    }
+
+    .price-card {
+      flex: 1 1 280px;
+      background: #f7f3ff;
+      border-radius: var(--radius);
+      padding: 18px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    .price-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 10px;
+    }
+
+    .price-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    .price-table th, .price-table td {
+      padding: 6px;
+      text-align: left;
+    }
+
+    .price-table thead th {
+      border-bottom: 1px solid var(--border);
+    }
+
+    ul.tos-list {
+      margin-left: 1rem;
+      margin-top: 6px;
+    }
+
+    ul.tos-list li + li {
+      margin-top: 4px;
+    }
+
+    /* Style example images inside pricing cards */
+    .style-example {
+      width: 100%;
+      max-width: 260px;
+      display: block;
+      margin: 0 auto 10px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      object-fit: cover;
+    }
+
+    .style-example-caption {
+      text-align: center;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    /* Showcase grid */
+    .showcase-group-title {
+      font-size: 1.05rem;
+      margin-top: 12px;
+      margin-bottom: 6px;
+      color: var(--text-main);
+    }
+
+    .showcase-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 18px;
+      margin-top: 8px;
+    }
+
+    .showcase-item {
+      background: #fdfbff;
+      border-radius: 12px;
+      padding: 6px;
+      border: 1px solid var(--border);
+      box-shadow: 0 6px 16px rgba(0,0,0,0.10);
+    }
+
+    .showcase-item img {
+      width: 100%;
+      display: block;
+      border-radius: 10px;
+      object-fit: cover;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .showcase-item:hover img {
+      transform: scale(1.03);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.18);
+    }
+
+    .showcase-caption {
+      margin-top: 4px;
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      text-align: center;
+    }
+
+    /* Contact list */
+    .contact-list {
+      list-style: none;
+      padding-left: 0;
+    }
+
+    .contact-list li + li {
+      margin-top: 4px;
+    }
+
+    footer {
+      text-align: center;
+      padding-top: 32px;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-shadow: 0 1px 0 rgba(255,255,255,0.8);
+    }
+
+    @media (max-width: 600px) {
+      section { padding: 22px 18px; }
+      .pricing-grid { flex-direction: column; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="page">
+
+    <!-- HEADER -->
+    <header id="top">
+      <h1>Cade’s Commissions</h1>
+      <p class="tagline">Character-focused artwork & fantasy illustration.</p>
+
+      <div class="status-pill">
+        <span class="status-dot"></span>
+        <strong>Commissions Open</strong>
+      </div>
+
+      <div class="nav-buttons">
+        <button class="nav-button" onclick="scrollToSection('pricing')">💰 Pricing</button>
+        <button class="nav-button" onclick="scrollToSection('commission-info')">🖌️ How to Commission</button>
+        <button class="nav-button" onclick="scrollToSection('gallery')">✨ Examples</button>
+        <button class="nav-button" onclick="scrollToSection('terms')">📜 Terms</button>
+        <button class="nav-button" onclick="scrollToSection('about')">🌟 About</button>
+        <button class="nav-button" onclick="scrollToSection('contact')">📬 Contact</button>
+      </div>
+    </header>
+
+    <!-- PRICING -->
+    <section id="pricing">
+      <h2>Commission Prices</h2>
+      <p class="section-sub">All prices are shown in USD. Final cost may vary based on complexity or added features.</p>
+
+      <div class="pricing-grid">
+
+        <!-- Style 1 -->
+        <div class="price-card">
+          <h3>Style 1 — Lineless</h3>
+          <img src="LinelessAeris.png" alt="Lineless example illustration" class="style-example">
+          <div class="style-example-caption">Example of Style 1 (lineless)</div>
+
+          <table class="price-table">
+            <thead>
+              <tr>
+                <th></th><th>Lineart</th><th>Colored</th><th>Rendered</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Bust</td><td>$5</td><td>$10</td><td>$15</td></tr>
+              <tr><td>Half Body</td><td>$10</td><td>$15</td><td>$20</td></tr>
+              <tr><td>Full Body</td><td>$20</td><td>$25</td><td>$30</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Style 2 -->
+        <div class="price-card">
+          <h3>Style 2 — Lined</h3>
+          <img src="JaxonLined.png" alt="Lined example illustration" class="style-example">
+          <div class="style-example-caption">Example of Style 2 (lined)</div>
+
+          <table class="price-table">
+            <tbody>
+              <tr><td>Bust</td><td>$20</td></tr>
+              <tr><td>Half Body</td><td>$30</td></tr>
+              <tr><td>Full Body</td><td>$40</td></tr>
+            </tbody>
+          </table>
+
+          <h3 style="margin-top: 16px;">Stickers</h3>
+          <p>$5 each</p>
+        </div>
+
+        <!-- Add-ons -->
+        <div class="price-card">
+          <h3>Add-Ons & Premium Options</h3>
+          <ul class="tos-list">
+            <li>Anthropomorphic / animal designs: <strong>+ $10</strong></li>
+            <li>Complex pose: <strong>+ $5</strong></li>
+            <li>Complex background: <strong>starting at + $5</strong></li>
+            <li>Additional characters: <strong>+ 50% of base price each</strong></li>
+          </ul>
+
+          <h3 style="margin-top: 16px;">Will Not Draw</h3>
+          <ul class="tos-list">
+            <li>NSFW content</li>
+            <li>Loli / underage characters</li>
+            <li>Mecha-focused characters</li>
+            <li>Hateful, bigoted, or offensive content</li>
+          </ul>
+
+          <p style="margin-top: 12px; font-size: 0.9rem;">
+            I reserve the right to refuse any commission for any reason.
+          </p>
+
+          <p style="margin-top: 10px; font-size: 0.9rem;">
+            Typical turnaround time is within <strong>~2 weeks</strong>. I’ll inform you of any delays.
+          </p>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- COMMISSION INFO -->
+    <section id="commission-info">
+      <h2>How to Commission</h2>
+      <p class="section-sub">A quick guide to getting your artwork started.</p>
+
+      <h3>Process</h3>
+      <ul class="tos-list">
+        <li>Fill out the Commission Request Form with your character details and references.</li>
+        <li>I’ll review your request and confirm the total price and timeline.</li>
+        <li>Payment is required upfront before I begin.</li>
+        <li>You'll receive optional sketch/WIP updates depending on the complexity.</li>
+        <li>Final artwork is delivered digitally in high-resolution PNG format.</li>
+      </ul>
+
+      <div style="margin-top: 16px;">
+        <a href="https://docs.google.com/forms" target="_blank" rel="noopener"
+           style="background: var(--accent); color: #fff; padding: 10px 20px; border-radius: 999px; text-decoration:none; box-shadow: var(--shadow-soft);">
+          Commission Request Form ↗
+        </a>
+      </div>
+    </section>
+
+    <!-- EXAMPLES -->
+    <section id="gallery">
+      <h2>Art Examples</h2>
+      <p class="section-sub">A few of my favorite pieces, showcasing portrait, half-body, and full-body work.</p>
+
+      <!-- Portrait -->
+      <h3 class="showcase-group-title">Portrait</h3>
+      <div class="showcase-grid">
+        <div class="showcase-item">
+          <img src="ErisPortrait.png" alt="Portrait of Eris holding an apple, surrounded by leaves.">
+          <div class="showcase-caption">Portrait — Eris</div>
+        </div>
+      </div>
+
+      <!-- Half Body -->
+      <h3 class="showcase-group-title">Half Body</h3>
+      <div class="showcase-grid">
+        <div class="showcase-item">
+          <img src="QuinnHalfBody.png" alt="Half-body illustration of Quinn">
+          <div class="showcase-caption">Half Body — Quinn</div>
+        </div>
+        <div class="showcase-item">
+          <img src="VampireHalfBody.png" alt="Half-body illustration of a vampire character looking out a window.">
+          <div class="showcase-caption">Half Body — Anastasia </div>
+        </div>
+      </div>
+
+      <!-- Full Body -->
+      <h3 class="showcase-group-title">Full Body</h3>
+      <div class="showcase-grid">
+        <div class="showcase-item">
+          <img src="WickFullBody.png" alt="Full-body artwork of Wick with wings and tattoos.">
+          <div class="showcase-caption">Full Body — Wick</div>
+        </div>
+        <div class="showcase-item">
+          <img src="HauronFullBody.png" alt="Full-body artwork of Hauron, a jackal warrior.">
+          <div class="showcase-caption">Full Body — Hauron</div>
+        </div>
+      </div>
+
+      <!-- Full Gallery Button -->
+      <div style="margin-top: 20px;">
+        <a href="https://drive.google.com/drive/folders/1V_FlwoT5FMV5uq4uQqx-pzAvnjo1PdkC" target="_blank" rel="noopener"
+           style="background: var(--accent); color: #fff; padding: 10px 20px; border-radius: 999px; text-decoration:none; box-shadow: var(--shadow-soft);">
+          View Full Gallery ↗
+        </a>
+      </div>
+    </section>
+
+    <!-- TERMS -->
+<section id="terms">
+  <h2>Terms & Conditions</h2>
+  <p class="section-sub">By commissioning me, you agree to the terms listed below.</p>
+
+  <h3>General</h3>
+  <ul class="tos-list">
+    <li>All artwork is <strong>digital only</strong> unless otherwise arranged.</li>
+    <li>Final artwork is for <strong>personal use only</strong> unless commercial rights are purchased separately.</li>
+    <li>I reserve the right to decline any commission for any reason.</li>
+    <li>Clients must provide <strong>clear visual references</strong>; I may decline heavily text-only descriptions.</li>
+  </ul>
+
+  <h3 style="margin-top:12px;">Payment</h3>
+  <ul class="tos-list">
+    <li>Payment is accepted in <strong>USD via PayPal or Venmo</strong>.</li>
+    <li><strong>Full payment upfront</strong> is required before I begin working on the piece.</li>
+    <li><strong>Chargebacks are not allowed.</strong> Please contact me directly if an issue arises.</li>
+  </ul>
+
+  <h3 style="margin-top:12px;">Process & Revisions</h3>
+  <ul class="tos-list">
+    <li>I will provide a sketch or WIP for approval unless the chosen style does not require one.</li>
+    <li>One round of <strong>minor revisions</strong> (small details, color tweaks) is included for free.</li>
+    <li><strong>Major changes</strong> (pose, outfit, composition) requested after sketch approval may incur an additional fee.</li>
+    <li>No revisions are accepted once the final artwork has been delivered.</li>
+  </ul>
+
+  <h3 style="margin-top:12px;">Timeline</h3>
+  <ul class="tos-list">
+    <li>Typical turnaround time is <strong>1–3 weeks</strong>, depending on queue and complexity.</li>
+    <li>Delays will always be communicated promptly.</li>
+  </ul>
+
+  <h3 style="margin-top:12px;">Refund Policy</h3>
+  <ul class="tos-list">
+    <li>A <strong>full refund</strong> is available only if I have not started the piece.</li>
+    <li>A <strong>partial refund</strong> may be granted if the piece is partially completed.</li>
+    <li><strong>No refunds</strong> are provided once the artwork is finished and delivered.</li>
+    <li>If I am unable to complete your commission, you will receive a full refund.</li>
+  </ul>
+
+  <h3 style="margin-top:12px;">Copyright & Usage</h3>
+  <ul class="tos-list">
+    <li>I retain all rights to the artwork.</li>
+    <li>You may post the artwork online as long as proper credit is given.</li>
+    <li>You may <strong>not</strong>:
+      <ul class="tos-list">
+        <li>Edit, recolor, or trace the artwork</li>
+        <li>Use the artwork commercially without purchasing commercial rights</li>
+        <li>Mint the artwork as NFTs</li>
+        <li>Use the artwork in AI datasets or for training AI models</li>
+      </ul>
+    </li>
+    <li>I may post the commissioned artwork in my portfolio or on social media unless you request privacy.</li>
+  </ul>
+</section>
+
+
+    <!-- ABOUT -->
+    <section id="about">
+      <h2>About Cade</h2>
+      <p>
+        Hi! I’m Cade — a fantasy character artist with a love for expressive poses,
+        bright palettes, and turning original characters into fully realized illustrations.
+      </p>
+      <p style="margin-top:8px;">
+        I especially enjoy D&D and TTRPG commissions, story-driven pieces, and designs that mix
+        cozy, whimsical, and dramatic vibes. When I’m not drawing, I’m usually worldbuilding,
+        gaming, or scribbling new ideas in the margins of my sketchbook.
+      </p>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <h2>Contact</h2>
+      <p class="section-sub">The best places to reach me for questions or commission inquiries:</p>
+
+      <ul class="contact-list">
+        <li>Instagram: <a href="https://instagram.com/cs.scribbles" target="_blank">@cs.scribbles</a></li>
+        <li>Discord: <code>cswazhere</code></li>
+      </ul>
+    </section>
+
+    <footer>
+      © <span id="year"></span> Cade — Commissions Portfolio
+    </footer>
+
+  </div>
+
+  <script>
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: "smooth" });
+      }
+    }
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
